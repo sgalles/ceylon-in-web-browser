@@ -8,19 +8,22 @@ import ceylon.logging {
 }
 "Run the module `foo.bar`."
 
-Anything dummy = addLogWriter {
-    void log(Priority p, Category c, String m, Exception? e) {
-        value print = p<=info 
-        then process.writeLine 
-        else process.writeError;
-        print("[``system.milliseconds``] ``p.string`` ``m``");
-        if (exists e) {
-            printStackTrace(e, print);
+Logger initLogging(){
+    addLogWriter {
+        void log(Priority p, Category c, String m, Exception? e) {
+            value print = p<=info 
+            then process.writeLine 
+            else process.writeError;
+            print("[``system.milliseconds``] ``p.string`` ``m``");
+            if (exists e) {
+                printStackTrace(e, print);
+            }
         }
-    }
-};
+    };
+    return logger(`module foo.bar`);
+}
 
-Logger log = logger(`module foo.bar`);
+Logger log = initLogging();
 
 
 shared void hello() {
